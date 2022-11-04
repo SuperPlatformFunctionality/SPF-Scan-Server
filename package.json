@@ -1,15 +1,23 @@
 {
-  "name": "node",
-  "version": "0.0.0",
-  "type": "module",
+  "name": "SPF-Scan-Server",
+  "version": "0.0.8",
   "private": true,
+  "author": "zengsheng",
   "scripts": {
-    "dev": "nodemon ./bin/www",
-    "start": "node ./bin/www"
+    "start": "pm2 start ecosystem.config.js --env production",
+    "start-in-dev": "pm2 start ecosystem.config.js --env development",
+    "start-in-local": "pm2 start ecosystem.config.js --env local",
+    "dev": "cross-env NODE_ENV=development nodemon --harmony main.js",
+    "check": "cross-env NODE_ENV=production nodemon --harmony main.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "pm2 deploy production"
   },
   "dependencies": {
+    "config-lite": "^3.0.0",
+    "connect-history-api-fallback": "^2.0.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "decimal.js": "^10.4.2",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
