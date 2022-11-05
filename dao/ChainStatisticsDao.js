@@ -88,26 +88,33 @@ async function getChainStatisticsInfo(transaction, forUpdate) {
 	return retCs;
 }
 
-async function updateCurrentBlockNoById(id, newCurrentBlockNo, transaction) {
-	return _updateSomePropertyById(id, "currentBlockNo", newCurrentBlockNo, transaction);
+let recId = null;
+
+async function updateCurrentBlockNoById(newCurrentBlockNo, transaction) {
+	return _updateSomePropertyById("currentBlockNo", newCurrentBlockNo, transaction);
 }
 
-async function updateTxCountById(id, txCount, transaction) {
-	return _updateSomePropertyById(id, "txCount", txCount, transaction);
+async function updateTxCountById(txCount, transaction) {
+	return _updateSomePropertyById("txCount", txCount, transaction);
 }
 async function updateNewAccountCountById(id, newAccountCount, transaction) {
 	return _updateSomePropertyById(id, "accountCount", newAccountCount, transaction);
 }
-async function updateContractCountById(id, newContractCount, transaction) {
-	return _updateSomePropertyById(id, "contractCount", newContractCount, transaction);
+async function updateContractCountById( newContractCount, transaction) {
+	return _updateSomePropertyById("contractCount", newContractCount, transaction);
 }
 
-async function _updateSomePropertyById(id, propertyName, propertyValue, transaction) {
+async function _updateSomePropertyById(propertyName, propertyValue, transaction) {
+	if(recId == null) {
+		let rec = await getChainStatisticsInfo(transaction);
+		recId = rec.id;
+	}
+
 	let updateObj = {};
 	updateObj[propertyName] = propertyValue;
 	let retArray = await ChainStatisticsDao.update(updateObj, {
 		where:{
-			id: id
+			id: recId
 		},
 		transaction:transaction,
 		logging:false
@@ -119,7 +126,14 @@ async function _updateSomePropertyById(id, propertyName, propertyValue, transact
 	return true;
 }
 
+async function initChainStaticDao() {
 
+	if(recId == null) {
+		let rec = await getChainStatisticsInfo();
+		recId = rec.id;
+	}
+}
+initChainStaticDao(); //do init
 
 exports.getChainStatisticsInfo = getChainStatisticsInfo;
 exports.updateCurrentBlockNoById = updateCurrentBlockNoById;

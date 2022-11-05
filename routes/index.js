@@ -1,7 +1,7 @@
+const routerChain = require("./routerChain");
 const routerBlock = require("./routerBlock");
-//const routerTxAssist = require("./routerTxAssist");
 
 module.exports = app => {
+	app.use("/chain", routerChain);
 	app.use("/block", routerBlock);
-//	app.use("/tx/assist", routerTxAssist);
 }

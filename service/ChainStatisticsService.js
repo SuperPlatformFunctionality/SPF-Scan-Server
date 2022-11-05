@@ -1,6 +1,6 @@
 const axios = require("axios");
 const config = require('../config/index.js');
-const rmrkTxSenderHost = config.rmrkTxSenderHost;
+const chainStatistics = require("../dao/ChainStatisticsDao");
 
 class ChainStatisticsService {
 	constructor() {
@@ -8,7 +8,7 @@ class ChainStatisticsService {
 	}
 
 	async initService() {
-
+//		chainStatistics.getChainStatisticsInfo();
 	}
 
 	async doSendNFT(nftId, toAddress) {
@@ -30,6 +30,6 @@ class ChainStatisticsService {
 
 }
 
-
 let csInstance = new ChainStatisticsService();
+csInstance.initService();
 module.exports = csInstance;
