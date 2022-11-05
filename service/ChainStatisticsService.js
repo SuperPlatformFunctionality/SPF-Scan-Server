@@ -1,6 +1,8 @@
 const axios = require("axios");
 const config = require('../config/index.js');
 const chainStatistics = require("../dao/ChainStatisticsDao");
+const chainMonitor = require("./ChainMonitor");
+chainMonitor.startMonitor();
 
 class ChainStatisticsService {
 	constructor() {

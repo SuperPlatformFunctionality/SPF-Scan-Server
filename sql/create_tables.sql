@@ -23,3 +23,14 @@ CREATE TABLE `block_summary` (
     INDEX `idx_validator`(`validator`) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `transfer_tx_history` (
+    `tx_hash` varchar(128) NOT NULL,
+    `block_no` bigint(16) unsigned NOT NULL,  -- from 0
+    `block_hash` varchar(128) NOT NULL,
+    `validator` varchar(32) NOT NULL DEFAULT "unknown",
+    `block_ts` bigint(16) unsigned NOT NULL, -- block timestamp
+    PRIMARY KEY `pk_tx_hash`(`tx_hash`) USING BTREE,
+    INDEX `idx_block_no`(`block_no`) USING BTREE,
+    INDEX `idx_block_hash`(`block_hash`) USING BTREE,
+    INDEX `idx_validator`(`validator`) USING HASH
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
