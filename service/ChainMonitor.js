@@ -18,7 +18,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
             let allTxs = blkInfo.transactions;
             let txsCnt = allTxs.length;
             console.log("Transaction count in block " + travelNo + " : ", txsCnt);
-            console.log(allTxs);
+//            console.log(allTxs);
             let txsCntETH = 0;
             for(let i = 0 ; i < txsCnt ; i++) {
                 let tmpTx = allTxs[i];
@@ -51,7 +51,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
         }
         await myUtils.sleepForMillisecond(400);
 
-//        console.log("all income transactions:\r\n", allIncomeTxs);
+        console.log("all SPF transfer transactions:\r\n", allIncomeTxs);
         let sendSuccess = 0;
         for(let i = 0 ; i < allIncomeTxs.length ; i++) {
             let tmpIncomeItem = allIncomeTxs[i];
