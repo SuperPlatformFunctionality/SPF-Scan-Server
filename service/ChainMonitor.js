@@ -14,7 +14,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
         let allIncomeTxs = [];
         for(let travelNo = blkNumberStart ; travelNo <= blkNumberEnd; travelNo++) {
             let blkInfo = await web3Instance.eth.getBlock(travelNo, true);
-//            console.log(blkInfo);
+            console.log(blkInfo);
             let allTxs = blkInfo.transactions;
             let txsCnt = allTxs.length;
             console.log("Transaction count in block " + travelNo + " : ", txsCnt);
@@ -51,7 +51,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
         }
         await myUtils.sleepForMillisecond(400);
 
-        console.log("all SPF transfer transactions:\r\n", allIncomeTxs);
+//        console.log("all SPF transfer transactions:\r\n", allIncomeTxs);
         let sendSuccess = 0;
         for(let i = 0 ; i < allIncomeTxs.length ; i++) {
             let tmpIncomeItem = allIncomeTxs[i];
