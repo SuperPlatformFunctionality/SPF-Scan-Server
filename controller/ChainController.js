@@ -14,10 +14,8 @@ class ChainController extends BaseComponent {
 	async queryChainSummary(req, res, next) {
 		let that = this;
 		let resJson = null;
-		let queryParam = req.body["queryParam"];
-		queryParam = queryParam.trim().toLowerCase();
 		try {
-			let retData = null;
+			let retData = await chainStatisticsService.getChainStatisticsInfo();
 			resJson = new ResponseModel(ResponseCode.SUCCESS, retData);
 		} catch (e) {
 			console.log(e);
@@ -25,7 +23,6 @@ class ChainController extends BaseComponent {
 		}
 		res.send(resJson);
 	}
-
 
 }
 

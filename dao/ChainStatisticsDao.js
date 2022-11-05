@@ -126,18 +126,16 @@ async function _updateSomePropertyById(propertyName, propertyValue, transaction)
 	return true;
 }
 
-async function initChainStaticDao() {
-
+async function initChainStatisticsDao() {
 	if(recId == null) {
 		let rec = await getChainStatisticsInfo();
 		recId = rec.id;
 	}
 }
-initChainStaticDao(); //do init
 
 exports.getChainStatisticsInfo = getChainStatisticsInfo;
 exports.updateCurrentBlockNoById = updateCurrentBlockNoById;
 exports.updateTxCountById = updateTxCountById;
 exports.updateNewAccountCountById = updateNewAccountCountById;
 exports.updateContractCountById = updateContractCountById;
-
+exports.initChainStatisticsDao = initChainStatisticsDao;

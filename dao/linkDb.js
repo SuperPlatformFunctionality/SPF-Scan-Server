@@ -8,7 +8,8 @@ let sequelize = new Sequelize(dbUrl,{
     }
 });
 
-async function testConnect() {
+
+async function tryConnectDB() {
     try {
         await sequelize.authenticate();
         console.log('Database Connection has been established successfully.');
@@ -17,7 +18,6 @@ async function testConnect() {
     }
 
 }
-testConnect();
+tryConnectDB();
 
 exports.sequelize = sequelize;
-

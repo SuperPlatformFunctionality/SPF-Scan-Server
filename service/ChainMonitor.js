@@ -72,10 +72,12 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
     return ret;
 }
 
+let chainStatistics = {};
 const BLOCK_TRAVEL_LEGHTH = 5;
 let startMonitorLoop = async function() {
-    let csInfo = await chainStatisticsDao.getChainStatisticsInfo();
-    let curBlkNoStart = csInfo.currentBlockNo;
+    chainStatistics = await chainStatisticsDao.getChainStatisticsInfo();
+//    console.log("chainStatistics:", chainStatistics);
+    let curBlkNoStart = chainStatistics.currentBlockNo;
     let curBlkNoEnd = curBlkNoStart + BLOCK_TRAVEL_LEGHTH;
     do {
         try {
@@ -121,3 +123,6 @@ exports.stopMonitor = async function() {
     running = false;
 }
 
+exports.getChainStatistics = async function() {
+    return chainStatistics;
+};
