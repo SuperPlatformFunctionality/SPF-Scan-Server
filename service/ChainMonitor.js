@@ -14,30 +14,36 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
         let allIncomeTxs = [];
         for(let travelNo = blkNumberStart ; travelNo <= blkNumberEnd; travelNo++) {
             let blkInfo = await web3Instance.eth.getBlock(travelNo, true);
+//            console.log(blkInfo);
             let allTxs = blkInfo.transactions;
             let txsCnt = allTxs.length;
-//            console.log("Transaction count in block " + travelNo + " : ", txsCnt);
-//            console.log(allTxs);
+            console.log("Transaction count in block " + travelNo + " : ", txsCnt);
+            console.log(allTxs);
             let txsCntETH = 0;
             for(let i = 0 ; i < txsCnt ; i++) {
                 let tmpTx = allTxs[i];
                 //console.log(tmpTx);
                 let vTxHash = tmpTx.hash;
+                let vValidator = tmpTx.miner;
                 let vFrom = tmpTx.from;
                 let vTo = tmpTx.to;
                 if(vTxHash == null || vFrom == null || vTo == null) {
                     continue;
                 }
 //                console.log("tmpTx", tmpTx);
+
                 vTxHash = vTxHash.toLowerCase();
+                vValidator = vValidator.toLowerCase();
                 vFrom = vFrom.toLowerCase();
                 vTo = vTo.toLowerCase();
-                let vValue = new Decimal(tmpTx.value.toString()).div(Math.pow(10, 18)).toFixed();
-                allIncomeTxs.push({ txHash:vTxHash,
+//                let vValue = new Decimal(tmpTx.value.toString()).div(Math.pow(10, 18)).toFixed();
+                let vValue = new Decimal(tmpTx.value.toString());
+                allIncomeTxs.push({
+                    txHash:vTxHash,
+                    validator:vValidator,
                     from:vFrom,
                     to:vTo,
-                    value:vValue,
-                    tokenName:"SPF"}
+                    value:vValue}
                 );
                 txsCntETH++;
             }
@@ -65,7 +71,6 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
     console.log("[" + blkNumberStart + "-" + blkNumberEnd + "]----end----" + new Date());
     return ret;
 }
-
 
 const BLOCK_TRAVEL_LEGHTH = 5;
 let startMonitorLoop = async function() {

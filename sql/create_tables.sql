@@ -1,4 +1,4 @@
--- drop database if spf_scan;
+-- drop database if exists spf_scan;
 create database spf_scan default character set utf8mb4 collate utf8mb4_unicode_ci;
 
 use spf_scan;
@@ -23,14 +23,16 @@ CREATE TABLE `block_summary` (
     INDEX `idx_validator`(`validator`) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `transfer_tx_history` (
+CREATE TABLE `tx_transfer` (
     `tx_hash` varchar(128) NOT NULL,
     `block_no` bigint(16) unsigned NOT NULL,  -- from 0
     `block_hash` varchar(128) NOT NULL,
-    `validator` varchar(32) NOT NULL DEFAULT "unknown",
     `block_ts` bigint(16) unsigned NOT NULL, -- block timestamp
+    `address_from` varchar(128) NOT NULL,
+    `address_to` varchar(128) NOT NULL,
+    `value` bigint(30) NOT NULL,
     PRIMARY KEY `pk_tx_hash`(`tx_hash`) USING BTREE,
     INDEX `idx_block_no`(`block_no`) USING BTREE,
-    INDEX `idx_block_hash`(`block_hash`) USING BTREE,
-    INDEX `idx_validator`(`validator`) USING HASH
+    INDEX `idx_address_from`(`address_from`) USING BTREE,
+    INDEX `idx_address_to`(`address_to`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
