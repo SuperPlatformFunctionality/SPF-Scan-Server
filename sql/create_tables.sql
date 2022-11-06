@@ -20,7 +20,8 @@ CREATE TABLE `block_summary` (
     `validator` varchar(32) NOT NULL DEFAULT "unknown",
     `block_ts` bigint(16) unsigned NOT NULL, -- block timestamp
     PRIMARY KEY `pk_block_no`(`block_no`) USING BTREE,
-    UNIQUE INDEX `uk_block_hash`(`block_hash`) USING BTREE,
+    UNIQUE INDEX `uk_block_hash_substrate`(`block_hash_substrate`) USING BTREE,
+    UNIQUE INDEX `uk_block_hash_evm`(`block_hash_evm`) USING BTREE,
     INDEX `idx_validator`(`validator`) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
