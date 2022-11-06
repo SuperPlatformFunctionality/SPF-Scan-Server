@@ -11,9 +11,13 @@ const BlockSummaryDao = sequelize.define('BlockSummaryDao', {
 		primaryKey:true,
 		field:"block_no"
     },
-	blockHash: {
+	blockHashSubstrate: {
 		type:DataTypes.STRING(128),
-		field:"block_hash"
+		field:"block_hash_substrate"
+	},
+	blockHashEvm: {
+		type:DataTypes.STRING(128),
+		field:"block_hash_evm"
 	},
     validator: {
 		type:DataTypes.STRING(32),
@@ -29,9 +33,9 @@ const BlockSummaryDao = sequelize.define('BlockSummaryDao', {
     timestamps: false
 });
 
-async function newBlockSummary(blockNo, blockHash, validator, blockTs, transaction) {
+async function newBlockSummary(blockNo, blockHashSubstrate, blockHashEvm, validator, blockTs, transaction) {
     let newBSModel = await BlockSummaryDao.create({
-		blockNo, blockHash, validator, blockTs
+		blockNo, blockHashSubstrate, blockHashEvm, validator, blockTs
     },{
         transaction:transaction,
         logging:false
@@ -48,8 +52,13 @@ async function getBlockSummaryByBlockNo(blockNo, transaction, forUpdate) {
 	return await _getBlockSummaryBySomeProperty(whereObj, transaction, forUpdate);
 }
 
-async function getBlockSummaryByBlockHash(blockHash, transaction, forUpdate) {
-	let whereObj = {"blockHash": blockHash}
+async function getBlockSummaryByBlockHashSubstrate(blockHashSubstrate, transaction, forUpdate) {
+	let whereObj = {"blockHashSubstrate": blockHashSubstrate}
+	return await _getBlockSummaryBySomeProperty(whereObj, transaction, forUpdate);
+}
+
+async function getBlockSummaryByBlockHashEvm(blockHashEvm, transaction, forUpdate) {
+	let whereObj = {"blockHashEvm": blockHashEvm}
 	return await _getBlockSummaryBySomeProperty(whereObj, transaction, forUpdate);
 }
 
@@ -103,6 +112,7 @@ async function _getBlockSummariesBySomeProperty(whereObj, transaction, forUpdate
 
 exports.newBlockSummary = newBlockSummary;
 exports.getBlockSummaryByBlockNo = getBlockSummaryByBlockNo;
-exports.getBlockSummaryByBlockHash = getBlockSummaryByBlockHash;
+exports.getBlockSummaryByBlockHashSubstrate = getBlockSummaryByBlockHashSubstrate;
+exports.getBlockSummaryByBlockHashEvm = getBlockSummaryByBlockHashEvm;
 exports.getBlockSummariesByValidator = getBlockSummariesByValidator;
 

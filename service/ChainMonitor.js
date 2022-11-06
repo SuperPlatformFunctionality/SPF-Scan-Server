@@ -1,30 +1,44 @@
 ﻿const Decimal = require('decimal.js');
 const web3Config = require("./web3Config");
 const web3Instance = web3Config.web3Instance;
+const polkadotJsConfig = require("./polkadotJsConfig");
 const myUtils = require("../utils/MyUtils");
 const chainStatisticsDao = require("../dao/ChainStatisticsDao");
+const BlockSummaryDao = require("../dao/BlockSummaryDao");
 
 Decimal.set({ precision: 30 });
 
 let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
     console.log("[" + blkNumberStart + "-" + blkNumberEnd + "]----start----" + new Date());
-
     let ret = {result:false};
+
+    let polkadotApi = await polkadotJsConfig.getPolkadotApiObjHttp();
     try {
         let allIncomeTxs = [];
         for(let travelNo = blkNumberStart ; travelNo <= blkNumberEnd; travelNo++) {
-            let blkInfo = await web3Instance.eth.getBlock(travelNo, true);
-            console.log(blkInfo);
-            let allTxs = blkInfo.transactions;
+
+            let blockHashSubstrate = await polkadotApi.rpc.chain.getBlockHash(travelNo);
+            let blockSubstrate = await polkadotApi.rpc.chain.getBlock(blockHashSubstrate);
+            console.log(blockHashSubstrate.toString(), blockSubstrate.toString());
+
+            let blkInfoEvm = await web3Instance.eth.getBlock(travelNo, true);
+            const blockHashEvm = blkInfoEvm.hash;
+            const validator = blkInfoEvm.miner;
+            const ts = blkInfoEvm.timestamp;
+
+            await BlockSummaryDao.newBlockSummary(travelNo, blockHashSubstrate.toString(), blockHashEvm,validator, ts);
+
+            let allTxs = blkInfoEvm.transactions;
             let txsCnt = allTxs.length;
             console.log("Transaction count in block " + travelNo + " : ", txsCnt);
+
 //            console.log(allTxs);
             let txsCntETH = 0;
             for(let i = 0 ; i < txsCnt ; i++) {
                 let tmpTx = allTxs[i];
                 //console.log(tmpTx);
                 let vTxHash = tmpTx.hash;
-                let vValidator = tmpTx.miner;
+                let vValidator = validator;
                 let vFrom = tmpTx.from;
                 let vTo = tmpTx.to;
                 if(vTxHash == null || vFrom == null || vTo == null) {
@@ -40,6 +54,8 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
                 let vValue = new Decimal(tmpTx.value.toString());
                 allIncomeTxs.push({
                     txHash:vTxHash,
+                    blockHashSubstrate:blockHashSubstrate,
+                    blockHashEvm:blockHashEvm,
                     validator:vValidator,
                     from:vFrom,
                     to:vTo,
@@ -48,6 +64,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
                 txsCntETH++;
             }
             console.log("SPF transfer transactions count in block " + travelNo + " : ", txsCntETH);
+
         }
         await myUtils.sleepForMillisecond(400);
 
@@ -68,6 +85,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
     } catch(e) {
         console.log("traversal Txs error", e);
     }
+
     console.log("[" + blkNumberStart + "-" + blkNumberEnd + "]----end----" + new Date());
     return ret;
 }

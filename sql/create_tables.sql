@@ -15,7 +15,8 @@ CREATE TABLE `chain_statistics` (
 
 CREATE TABLE `block_summary` (
     `block_no` bigint(16) unsigned NOT NULL,  -- from 0
-    `block_hash` varchar(128) NOT NULL,
+    `block_hash_substrate` varchar(128) NOT NULL,
+    `block_hash_evm` varchar(128) NOT NULL,
     `validator` varchar(32) NOT NULL DEFAULT "unknown",
     `block_ts` bigint(16) unsigned NOT NULL, -- block timestamp
     PRIMARY KEY `pk_block_no`(`block_no`) USING BTREE,

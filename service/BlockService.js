@@ -24,7 +24,10 @@ class BlockService {
 	}
 
 	async getBlockSummaryByBlockHash(blockHash) {
-		let bs = await BlockSummaryDao.getBlockSummaryByBlockHash(blockHash);
+		let bs = await BlockSummaryDao.getBlockSummaryByBlockHashEvm(blockHash);
+		if(bs == null) {
+			bs = await BlockSummaryDao.getBlockSummaryByBlockHashSubstrate(blockHash);
+		}
 		return bs;
 	}
 
