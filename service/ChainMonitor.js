@@ -25,8 +25,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
             const blockHashEvm = blkInfoEvm.hash;
             const validator = blkInfoEvm.miner;
             const ts = blkInfoEvm.timestamp;
-
-            await BlockSummaryDao.newBlockSummary(travelNo, blockHashSubstrate.toString(), blockHashEvm,validator, ts);
+            await BlockSummaryDao.newBlockSummary(travelNo, blockHashSubstrate.toString(), blockHashEvm, validator, ts);
 
             let allTxs = blkInfoEvm.transactions;
             let txsCnt = allTxs.length;
