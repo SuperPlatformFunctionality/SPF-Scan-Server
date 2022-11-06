@@ -14,7 +14,7 @@ CREATE TABLE `chain_statistics` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 CREATE TABLE `block_summary` (
-    `block_no` bigint(16) unsigned NOT NULL,  -- from 0
+    `block_no` bigint(10) unsigned NOT NULL,  -- from 0
     `block_hash_substrate` varchar(128) NOT NULL,
     `block_hash_evm` varchar(128) NOT NULL,
     `validator` varchar(42) NOT NULL DEFAULT "unknown",

@@ -90,21 +90,21 @@ async function getChainStatisticsInfo(transaction, forUpdate) {
 
 let recId = null;
 
-async function updateCurrentBlockNoById(newCurrentBlockNo, transaction) {
-	return _updateSomePropertyById("currentBlockNo", newCurrentBlockNo, transaction);
+async function updateCurrentBlockNo(newCurrentBlockNo, transaction) {
+	return _updateSomeProperty("currentBlockNo", newCurrentBlockNo, transaction);
 }
 
-async function updateTxCountById(txCount, transaction) {
-	return _updateSomePropertyById("txCount", txCount, transaction);
+async function updateTxCount(txCount, transaction) {
+	return _updateSomeProperty("txCount", txCount, transaction);
 }
-async function updateNewAccountCountById(id, newAccountCount, transaction) {
-	return _updateSomePropertyById(id, "accountCount", newAccountCount, transaction);
+async function updateNewAccountCount(newAccountCount, transaction) {
+	return _updateSomeProperty( "accountCount", newAccountCount, transaction);
 }
-async function updateContractCountById( newContractCount, transaction) {
-	return _updateSomePropertyById("contractCount", newContractCount, transaction);
+async function updateContractCount( newContractCount, transaction) {
+	return _updateSomeProperty("contractCount", newContractCount, transaction);
 }
 
-async function _updateSomePropertyById(propertyName, propertyValue, transaction) {
+async function _updateSomeProperty(propertyName, propertyValue, transaction) {
 	if(recId == null) {
 		let rec = await getChainStatisticsInfo(transaction);
 		recId = rec.id;
@@ -134,8 +134,8 @@ async function initChainStatisticsDao() {
 }
 
 exports.getChainStatisticsInfo = getChainStatisticsInfo;
-exports.updateCurrentBlockNoById = updateCurrentBlockNoById;
-exports.updateTxCountById = updateTxCountById;
-exports.updateNewAccountCountById = updateNewAccountCountById;
-exports.updateContractCountById = updateContractCountById;
+exports.updateCurrentBlockNo = updateCurrentBlockNo;
+exports.updateTxCount = updateTxCount;
+exports.updateNewAccountCount = updateNewAccountCount;
+exports.updateContractCount = updateContractCount;
 exports.initChainStatisticsDao = initChainStatisticsDao;

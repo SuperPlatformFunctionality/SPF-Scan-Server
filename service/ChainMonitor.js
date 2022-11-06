@@ -93,7 +93,6 @@ let chainStatistics = {};
 const BLOCK_TRAVEL_LEGHTH = 5;
 let startMonitorLoop = async function() {
     chainStatistics = await chainStatisticsDao.getChainStatisticsInfo();
-//    console.log("chainStatistics:", chainStatistics);
     let curBlkNoStart = chainStatistics.currentBlockNo;
     let curBlkNoEnd = curBlkNoStart + BLOCK_TRAVEL_LEGHTH;
     do {
@@ -109,7 +108,9 @@ let startMonitorLoop = async function() {
             console.log("\r\n\r\n");
             let travelRes = await travTxsFromSomeBlk(curBlkNoStart, curBlkNoEnd);
             if(travelRes.result) {
-                await chainStatisticsDao.updateCurrentBlockNoById(curBlkNoEnd);
+                chainStatistics.currentBlockNo = curBlkNoEnd;
+                await chainStatisticsDao.updateCurrentBlockNo(curBlkNoEnd);
+
                 curBlkNoStart = curBlkNoEnd + 1;
                 curBlkNoEnd = curBlkNoEnd + BLOCK_TRAVEL_LEGHTH;
             } else {
