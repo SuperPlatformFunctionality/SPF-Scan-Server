@@ -65,6 +65,14 @@ let isInteger = function(str) {
 
 const calculationPrefix = "033cf5";
 let transferAddressFromEthToSPF = function(ethAddress) {
+	if(ethAddress.startsWith("SPF")) {
+		return ethAddress;
+	}
+
+	if(ethAddress.length != 42 && ethAddress.length != 40) {
+		return null;
+	}
+
 	if(ethAddress.startsWith("0x")) {
 		ethAddress = ethAddress.substring(2);
 	}

@@ -26,7 +26,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
 
             console.log(blkInfoEvm);
             const blockHashEvm = blkInfoEvm.hash;
-            const validator = blkInfoEvm.miner;
+            const validator = myUtils.transferAddressFromEthToSPF(blkInfoEvm.miner);
             const ts = blkInfoEvm.timestamp;
             let bsSameNo = await BlockSummaryDao.getBlockSummaryByBlockNo(travelNo);
             if(bsSameNo == null) {

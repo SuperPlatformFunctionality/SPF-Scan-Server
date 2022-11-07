@@ -40,10 +40,10 @@
         "msg": "success",
         "data": {
             "blockNo": 10,
-            "blockHashSubstrate": "0xf1117ceb43bd56f97a7349db6470d0ef41532b9bda13490fcbcafe8c26fbb207",
-            "blockHashEvm": "0xfa71a39452fd4382dd37417eccadc14684ddf4e713014abd270c8908f2ebacb6",
-            "validator": "0xf24FF3a9CF04c71Dbc94D0b566f7A27B94566cac",
-            "blockTs": 1667703589
+            "blockHashSubstrate": "0xc01df7a61e808b51c620a2790c970f8ff479742bc8808e9009c1e509f2299fdf",
+            "blockHashEvm": "0x9e3516542729d90b2325b5208ade7a124e05fd0ff88f54c3e67eabed86e5a78c",
+            "validator": "SPFT6ZmEfrbLoZgb31LTjFaLCvSA9eYSpzkt",
+            "blockTs": 1667796224
         }
     }
 

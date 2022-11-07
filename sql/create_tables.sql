@@ -17,7 +17,7 @@ CREATE TABLE `block_summary` (
     `block_no` bigint(10) unsigned NOT NULL,  -- from 0
     `block_hash_substrate` varchar(128) NOT NULL,
     `block_hash_evm` varchar(128) NOT NULL,
-    `validator` varchar(42) NOT NULL DEFAULT "unknown",
+    `validator` varchar(36) NOT NULL DEFAULT "unknown",
     `block_ts` bigint(16) unsigned NOT NULL, -- block timestamp
     PRIMARY KEY `pk_block_no`(`block_no`) USING BTREE,
     UNIQUE INDEX `uk_block_hash_substrate`(`block_hash_substrate`) USING BTREE,
