@@ -60,7 +60,7 @@ let displayCurMemoryUsage = function(preMsg) {
 }
 
 let isInteger = function(str) {
-	return Decimal.isInteger(str);
+	return Number.isInteger(str);
 }
 
 const calculationPrefix = "033cf5";
