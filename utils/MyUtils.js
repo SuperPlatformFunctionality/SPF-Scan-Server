@@ -59,10 +59,6 @@ let displayCurMemoryUsage = function(preMsg) {
 				'arrayBuffers:' + byteFormat(mem.arrayBuffers));
 }
 
-let isInteger = function(str) {
-	return Number.isInteger(str);
-}
-
 const calculationPrefix = "033cf5";
 let transferAddressFromEthToSPF = function(ethAddress) {
 	if(ethAddress.startsWith("SPF")) {
@@ -118,7 +114,6 @@ let MyUtils = {
 	getRandomNumbericString,
 	getRandomString,
 	displayCurMemoryUsage,
-	isInteger,
 	transferAddressFromEthToSPF,
 	transferAddressFromSPFToETH
 }
