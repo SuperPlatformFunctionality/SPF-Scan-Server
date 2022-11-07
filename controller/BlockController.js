@@ -22,7 +22,7 @@ class BlockController extends BaseComponent {
 	async queryBlockSummary(req, res, next) {
 		let that = this;
 		let resJson = null;
-		let queryParam = req.body["queryParam"];
+		let queryParam = req.body["queryParam"].toString();
 		queryParam = queryParam.trim().toLowerCase();
 		try {
 			let retData = null;
