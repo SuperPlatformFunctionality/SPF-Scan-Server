@@ -30,13 +30,11 @@ class BlockController extends BaseComponent {
 				retData = await blockService.getBlockSummaryByBlockHeight(queryParam);
 			} else if(typeof queryParam === 'string') {
 				queryParam = queryParam.trim().toLowerCase();
-				let tmp = new Decimal(queryParam);
-				if(!tmp.isNaN() && tmp.isInteger()) {
-					retData = await blockService.getBlockSummaryByBlockHeight(tmp.toNumber());
-				} else {
+				if(queryParam.startsWith("0x")) {
 					retData = await blockService.getBlockSummaryByBlockHash(queryParam);
+				} else {
+					retData = await blockService.getBlockSummaryByBlockHeight(new Decimal(queryParam).toNumber());
 				}
-
 			}
 			resJson = new ResponseModel(ResponseCode.SUCCESS, retData);
 		} catch (e) {
