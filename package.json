@@ -20,6 +20,7 @@
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "decimal.js": "^10.4.2",
+    "ethers": "^5.7.2",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
@@ -27,6 +28,7 @@
     "mysql2": "^2.3.3",
     "node-cron": "^3.0.2",
     "nodemon": "^2.0.20",
+    "secp256k1": "^4.0.3",
     "sequelize": "^6.25.3",
     "web3": "^1.8.0"
   }
