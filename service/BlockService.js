@@ -19,6 +19,9 @@ class BlockService {
 	}
 
 	async getBlockSummaryByBlockHeight(blockHeight) {
+		if(MyUtils.isInteger(blockHeight)) {
+			blockHeight = parseInt(blockHeight, 10);
+		}
 		let bs = await BlockSummaryDao.getBlockSummaryByBlockNo(blockHeight);
 		return bs;
 	}

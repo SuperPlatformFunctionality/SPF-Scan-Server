@@ -31,7 +31,7 @@
     request: 
     POST /block/summary
     {
-        "queryParam":20, // height or block hash (evm style/substrate style)
+        "queryParam":10, // height or block hash (evm style/substrate style)
     }
     
     response:
