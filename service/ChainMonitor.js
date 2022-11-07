@@ -3,8 +3,10 @@ const web3Config = require("./web3Config");
 const web3Instance = web3Config.web3Instance;
 const polkadotJsConfig = require("./polkadotJsConfig");
 const myUtils = require("../utils/MyUtils");
-const chainStatisticsDao = require("../dao/ChainStatisticsDao");
 const BlockSummaryDao = require("../dao/BlockSummaryDao");
+
+const chainStatisticsDao = require("../dao/ChainStatisticsDao");
+
 
 Decimal.set({ precision: 30 });
 
@@ -17,17 +19,20 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
         let allIncomeTxs = [];
         for(let travelNo = blkNumberStart ; travelNo <= blkNumberEnd; travelNo++) {
 
+            //get block by polkadot.js
             let blockHashSubstrate = await polkadotApi.rpc.chain.getBlockHash(travelNo);
             let blockSubstrate = await polkadotApi.rpc.chain.getBlock(blockHashSubstrate);
-            console.log(blockHashSubstrate.toString());
-            console.log( blockSubstrate.toString());
+//            console.log(blockHashSubstrate.toString());
+//            console.log(blockSubstrate.toString());
 
+            //get block by web3.js
             let blkInfoEvm = await web3Instance.eth.getBlock(travelNo, true);
-
-            console.log(blkInfoEvm);
+//            console.log(blkInfoEvm);
             const blockHashEvm = blkInfoEvm.hash;
             const validator = myUtils.transferAddressFromEthToSPF(blkInfoEvm.miner);
             const ts = blkInfoEvm.timestamp;
+
+            //update block summary records
             let bsSameNo = await BlockSummaryDao.getBlockSummaryByBlockNo(travelNo);
             if(bsSameNo == null) {
                 await BlockSummaryDao.newBlockSummary(travelNo, blockHashSubstrate.toString(), blockHashEvm, validator, ts);
@@ -69,7 +74,6 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
                 txsCntETH++;
             }
             console.log("SPF transfer transactions count in block " + travelNo + " : ", txsCntETH);
-
         }
         await myUtils.sleepForMillisecond(400);
 
@@ -78,13 +82,16 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
         for(let i = 0 ; i < allIncomeTxs.length ; i++) {
             let tmpIncomeItem = allIncomeTxs[i];
             try {
-                let tempMsgString = JSON.stringify(tmpIncomeItem);
+//                let tempMsgString = JSON.stringify(tmpIncomeItem);
+                chainStatistics.txCount += 1;
                 sendSuccess++;
             } catch(e) {
                 console.log("send msg to rabbitmq error", e);
             }
             await myUtils.sleepForMillisecond(500);
         }
+
+        await chainStatisticsDao.updateTxCount(chainStatistics.txCount);
 
         ret.result = (sendSuccess == allIncomeTxs.length);
     } catch(e) {
@@ -95,7 +102,12 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
     return ret;
 }
 
-let chainStatistics = {};
+let chainStatistics = {
+    currentBlockNo:0,
+    txCount:0,
+    accountCount:0,
+    contractCount:0
+};
 const BLOCK_TRAVEL_LEGHTH = 5;
 let startMonitorLoop = async function() {
     chainStatistics = await chainStatisticsDao.getChainStatisticsInfo();
