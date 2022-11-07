@@ -31,7 +31,6 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
             let blkInfoEvm = await web3Instance.eth.getBlock(travelNo, true);
 //            console.log(blkInfoEvm);
             const blockHashEvm = blkInfoEvm.hash;
-            const validator = myUtils.transferAddressFromEthToSPF(blkInfoEvm.miner);
             const ts = blkInfoEvm.timestamp;
 
             //update block summary records
@@ -50,18 +49,15 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
                 let tmpTx = allTxsThisBlock[i];
                 //console.log(tmpTx);
                 let vTxHash = tmpTx.hash;
-                let vValidator = validator;
-                let vFrom = myUtils.transferAddressFromEthToSPF(tmpTx.from);
-                let vTo = myUtils.transferAddressFromEthToSPF(tmpTx.to);
+                let vValidator = myUtils.transferAddressFromEthToSPF(blkInfoEvm.miner.toLowerCase());
+                let vFrom = myUtils.transferAddressFromEthToSPF(tmpTx.from.toLowerCase());
+                let vTo = myUtils.transferAddressFromEthToSPF(tmpTx.to.toLowerCase());
                 if(vTxHash == null || vFrom == null || vTo == null) {
                     continue;
                 }
 //                console.log("tmpTx", tmpTx);
 
                 vTxHash = vTxHash.toLowerCase();
-                vValidator = vValidator.toLowerCase();
-                vFrom = vFrom.toLowerCase();
-                vTo = vTo.toLowerCase();
 //                let vValue = new Decimal(tmpTx.value.toString()).div(Math.pow(10, 18)).toFixed();
                 let vValue = new Decimal(tmpTx.value.toString());
                 allTxs.push({
@@ -79,7 +75,6 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
             }
             console.log("SPF transfer transactions count in block " + travelNo + " : ", txsCntETH);
         }
-        console.log(allTxs);
 
         let txCountAdded = 0;
         let acntCountAdded = 0;
