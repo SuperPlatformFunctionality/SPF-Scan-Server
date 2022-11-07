@@ -19,9 +19,12 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
 
             let blockHashSubstrate = await polkadotApi.rpc.chain.getBlockHash(travelNo);
             let blockSubstrate = await polkadotApi.rpc.chain.getBlock(blockHashSubstrate);
-            console.log(blockHashSubstrate.toString(), blockSubstrate.toString());
+            console.log(blockHashSubstrate.toString());
+            console.log( blockSubstrate.toString());
 
             let blkInfoEvm = await web3Instance.eth.getBlock(travelNo, true);
+
+            console.log(blkInfoEvm);
             const blockHashEvm = blkInfoEvm.hash;
             const validator = blkInfoEvm.miner;
             const ts = blkInfoEvm.timestamp;

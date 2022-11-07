@@ -29,7 +29,7 @@ class BlockController extends BaseComponent {
 			if(MyUtils.isInteger(queryParam)) {
 				retData = await blockService.getBlockSummaryByBlockHeight(queryParam);
 			} else if(that.isBlockHash(queryParam)) {
-				retData = await blockService.getBlockSummaryByBlockHeight(queryParam);
+				retData = await blockService.getBlockSummaryByBlockHash(queryParam);
 			}
 			resJson = new ResponseModel(ResponseCode.SUCCESS, retData);
 		} catch (e) {
