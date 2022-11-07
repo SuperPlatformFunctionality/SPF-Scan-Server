@@ -31,12 +31,13 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
             let blkInfoEvm = await web3Instance.eth.getBlock(travelNo, true);
 //            console.log(blkInfoEvm);
             const blockHashEvm = blkInfoEvm.hash;
+            const blockValidator = myUtils.transferAddressFromEthToSPF(blkInfoEvm.miner.toLowerCase());
             const ts = blkInfoEvm.timestamp;
 
             //update block summary records
             let bsSameNo = await BlockSummaryDao.getBlockSummaryByBlockNo(travelNo);
             if(bsSameNo == null) {
-                await BlockSummaryDao.newBlockSummary(travelNo, blockHashSubstrate.toString(), blockHashEvm, validator, ts);
+                await BlockSummaryDao.newBlockSummary(travelNo, blockHashSubstrate.toString(), blockHashEvm, blockValidator, ts);
             }
 
             let allTxsThisBlock = blkInfoEvm.transactions;
@@ -49,7 +50,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
                 let tmpTx = allTxsThisBlock[i];
                 //console.log(tmpTx);
                 let vTxHash = tmpTx.hash;
-                let vValidator = myUtils.transferAddressFromEthToSPF(blkInfoEvm.miner.toLowerCase());
+                let vValidator = blockValidator;
                 let vFrom = myUtils.transferAddressFromEthToSPF(tmpTx.from.toLowerCase());
                 let vTo = myUtils.transferAddressFromEthToSPF(tmpTx.to.toLowerCase());
                 if(vTxHash == null || vFrom == null || vTo == null) {
