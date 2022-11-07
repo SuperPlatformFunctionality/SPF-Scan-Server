@@ -30,7 +30,7 @@ const TxRecordDao = sequelize.define('TxRecordDao', {
 		field:"address_to"
 	},
 	value: {
-		type:DataTypes.BIGINT.UNSIGNED,
+		type:DataTypes.STRING(32),
 		field:"value"
 	}
 }, {

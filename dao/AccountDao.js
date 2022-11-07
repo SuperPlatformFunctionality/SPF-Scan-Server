@@ -17,8 +17,8 @@ const AccountDao = sequelize.define('AccountDao', {
 		field:"init_block_no"
 	},
 	balance: {
-		type:DataTypes.BIGINT.UNSIGNED,
-		field:"block_ts"
+		type:DataTypes.STRING(32),
+		field:"balance"
 	}
 }, {
     // Other model options go here
