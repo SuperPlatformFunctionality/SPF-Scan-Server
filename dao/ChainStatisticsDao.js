@@ -97,7 +97,7 @@ async function updateCurrentBlockNo(newCurrentBlockNo, transaction) {
 async function updateTxCount(txCount, transaction) {
 	return _updateSomeProperty("txCount", txCount, transaction);
 }
-async function updateNewAccountCount(newAccountCount, transaction) {
+async function updateAccountCount(newAccountCount, transaction) {
 	return _updateSomeProperty( "accountCount", newAccountCount, transaction);
 }
 async function updateContractCount( newContractCount, transaction) {
@@ -136,6 +136,6 @@ async function initChainStatisticsDao() {
 exports.getChainStatisticsInfo = getChainStatisticsInfo;
 exports.updateCurrentBlockNo = updateCurrentBlockNo;
 exports.updateTxCount = updateTxCount;
-exports.updateNewAccountCount = updateNewAccountCount;
+exports.updateAccountCount = updateAccountCount;
 exports.updateContractCount = updateContractCount;
 exports.initChainStatisticsDao = initChainStatisticsDao;

@@ -3,9 +3,11 @@ const web3Config = require("./web3Config");
 const web3Instance = web3Config.web3Instance;
 const polkadotJsConfig = require("./polkadotJsConfig");
 const myUtils = require("../utils/MyUtils");
-const BlockSummaryDao = require("../dao/BlockSummaryDao");
 
-const chainStatisticsDao = require("../dao/ChainStatisticsDao");
+const ChainStatisticsDao = require("../dao/ChainStatisticsDao");
+const BlockSummaryDao = require("../dao/BlockSummaryDao");
+const AccountDao = require("../dao/AccountDao");
+const TxRecordDao = require("../dao/TxRecordDao");
 
 
 Decimal.set({ precision: 30 });
@@ -16,7 +18,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
 
     let polkadotApi = await polkadotJsConfig.getPolkadotApiObjHttp();
     try {
-        let allIncomeTxs = [];
+        let allTxs = [];
         for(let travelNo = blkNumberStart ; travelNo <= blkNumberEnd; travelNo++) {
 
             //get block by polkadot.js
@@ -62,8 +64,10 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
                 vTo = vTo.toLowerCase();
 //                let vValue = new Decimal(tmpTx.value.toString()).div(Math.pow(10, 18)).toFixed();
                 let vValue = new Decimal(tmpTx.value.toString());
-                allIncomeTxs.push({
+                allTxs.push({
+                    blockNo:travelNo,
                     txHash:vTxHash,
+                    timestamp:ts,
                     blockHashSubstrate:blockHashSubstrate,
                     blockHashEvm:blockHashEvm,
                     validator:vValidator,
@@ -77,28 +81,50 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
         }
         await myUtils.sleepForMillisecond(400);
 
-//        console.log("all SPF transfer transactions:\r\n", allIncomeTxs);
-        let sendSuccess = 0;
-        for(let i = 0 ; i < allIncomeTxs.length ; i++) {
-            let tmpIncomeItem = allIncomeTxs[i];
+//        console.log("all SPF transfer transactions:\r\n", allTxs);
+        let txCountAdded = 0;
+        let acntCountAdded = 0;
+        for(let i = 0 ; i < allTxs.length ; i++) {
+            let tmpTx = allTxs[i];
             try {
-//                let tempMsgString = JSON.stringify(tmpIncomeItem);
-                chainStatistics.txCount += 1;
-                sendSuccess++;
+//                let tempMsgString = JSON.stringify(tmpTx);
+                await TxRecordDao.newTxRecord(tmpTx.txHash, tmpTx.blockNo,
+                                            tmpTx.timestamp, "transfer",
+                                            tmpTx.from, tmpTx.to, tmpTx.value);
+                txCountAdded++;
+
+                acntCountAdded += (await newAccountToDB(tmpTx.from, tmpTx.blockNo) ? 1:0);
+                acntCountAdded += (await newAccountToDB(tmpTx.to, tmpTx.blockNo) ? 1: 0);
             } catch(e) {
-                console.log("send msg to rabbitmq error", e);
+                console.log(e);
             }
-            await myUtils.sleepForMillisecond(500);
         }
 
-        await chainStatisticsDao.updateTxCount(chainStatistics.txCount);
-
-        ret.result = (sendSuccess == allIncomeTxs.length);
+        chainStatistics.currentBlockNo = blkNumberEnd;
+        if(acntCountAdded > 0) {
+            chainStatistics.accountCount += acntCountAdded;
+            await ChainStatisticsDao.updateAccountCount(chainStatistics.accountCount);
+        }
+        if(txCountAdded > 0) {
+            chainStatistics.txCount += txCountAdded;
+            await ChainStatisticsDao.updateTxCount(chainStatistics.txCount);
+        }
+        ret.result = true;
     } catch(e) {
         console.log("traversal Txs error", e);
     }
 
     console.log("[" + blkNumberStart + "-" + blkNumberEnd + "]----end----" + new Date());
+    return ret;
+}
+
+let newAccountToDB = async function(newAddress, blockNo) {
+    let ret = false;
+    let newAcnt = await AccountDao.getAccountByAddress(newAddress);
+    if(newAcnt == null) {
+        await AccountDao.newAccount(newAddress, "", blockNo);
+        ret = true;
+    }
     return ret;
 }
 
@@ -110,7 +136,7 @@ let chainStatistics = {
 };
 const BLOCK_TRAVEL_LEGHTH = 5;
 let startMonitorLoop = async function() {
-    chainStatistics = await chainStatisticsDao.getChainStatisticsInfo();
+    chainStatistics = await ChainStatisticsDao.getChainStatisticsInfo();
     let curBlkNoStart = chainStatistics.currentBlockNo;
     let curBlkNoEnd = curBlkNoStart + BLOCK_TRAVEL_LEGHTH;
     do {
@@ -126,8 +152,7 @@ let startMonitorLoop = async function() {
             console.log("\r\n\r\n");
             let travelRes = await travTxsFromSomeBlk(curBlkNoStart, curBlkNoEnd);
             if(travelRes.result) {
-                chainStatistics.currentBlockNo = curBlkNoEnd;
-                await chainStatisticsDao.updateCurrentBlockNo(curBlkNoEnd);
+                await ChainStatisticsDao.updateCurrentBlockNo(curBlkNoEnd);
 
                 curBlkNoStart = curBlkNoEnd + 1;
                 curBlkNoEnd = curBlkNoEnd + BLOCK_TRAVEL_LEGHTH;
