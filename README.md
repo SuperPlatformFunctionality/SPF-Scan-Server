@@ -39,11 +39,11 @@
         "code": "0000",
         "msg": "success",
         "data": {
-            "blockNo": 0,
-            "blockHashSubstrate": "0x4d630ef06d5662369e9c61d92fd5815ad3e1ac694d8d5b5cb63422b77ba5b854",
-            "blockHashEvm": "0x462dae0d52109020454e8af1d27f9bb9dbc2b6e0bdf7ae54e9114e63a9f29fec",
-            "validator": "0x0000000000000000000000000000000000000000",
-            "blockTs": 0
+            "blockNo": 10,
+            "blockHashSubstrate": "0xf1117ceb43bd56f97a7349db6470d0ef41532b9bda13490fcbcafe8c26fbb207",
+            "blockHashEvm": "0xfa71a39452fd4382dd37417eccadc14684ddf4e713014abd270c8908f2ebacb6",
+            "validator": "0xf24FF3a9CF04c71Dbc94D0b566f7A27B94566cac",
+            "blockTs": 1667703589
         }
     }
 
