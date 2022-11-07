@@ -60,7 +60,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
 
                 vTxHash = vTxHash.toLowerCase();
 //                let vValue = new Decimal(tmpTx.value.toString()).div(Math.pow(10, 18)).toFixed();
-                let vValue = new Decimal(tmpTx.value.toString());
+                let vValue = new Decimal(tmpTx.value.toString()).toString();
                 allTxs.push({
                     blockNo:travelNo,
                     txHash:vTxHash,
