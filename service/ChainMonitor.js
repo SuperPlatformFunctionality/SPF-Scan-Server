@@ -40,19 +40,19 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
                 await BlockSummaryDao.newBlockSummary(travelNo, blockHashSubstrate.toString(), blockHashEvm, validator, ts);
             }
 
-            let allTxs = blkInfoEvm.transactions;
-            let txsCnt = allTxs.length;
+            let allTxsThisBlock = blkInfoEvm.transactions;
+            let txsCnt = allTxsThisBlock.length;
             console.log("Transaction count in block " + travelNo + " : ", txsCnt);
 
-//            console.log(allTxs);
+//            console.log(allTxsThisBlock);
             let txsCntETH = 0;
             for(let i = 0 ; i < txsCnt ; i++) {
-                let tmpTx = allTxs[i];
+                let tmpTx = allTxsThisBlock[i];
                 //console.log(tmpTx);
                 let vTxHash = tmpTx.hash;
                 let vValidator = validator;
-                let vFrom = tmpTx.from;
-                let vTo = tmpTx.to;
+                let vFrom = myUtils.transferAddressFromEthToSPF(tmpTx.from);
+                let vTo = myUtils.transferAddressFromEthToSPF(tmpTx.to);
                 if(vTxHash == null || vFrom == null || vTo == null) {
                     continue;
                 }
@@ -79,20 +79,21 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
             }
             console.log("SPF transfer transactions count in block " + travelNo + " : ", txsCntETH);
         }
-        await myUtils.sleepForMillisecond(400);
+        console.log(allTxs);
 
-//        console.log("all SPF transfer transactions:\r\n", allTxs);
         let txCountAdded = 0;
         let acntCountAdded = 0;
         for(let i = 0 ; i < allTxs.length ; i++) {
             let tmpTx = allTxs[i];
             try {
+                console.log("do new tx record");
 //                let tempMsgString = JSON.stringify(tmpTx);
                 await TxRecordDao.newTxRecord(tmpTx.txHash, tmpTx.blockNo,
                                             tmpTx.timestamp, "transfer",
                                             tmpTx.from, tmpTx.to, tmpTx.value);
                 txCountAdded++;
 
+                console.log("do new account record");
                 acntCountAdded += (await newAccountToDB(tmpTx.from, tmpTx.blockNo) ? 1:0);
                 acntCountAdded += (await newAccountToDB(tmpTx.to, tmpTx.blockNo) ? 1: 0);
             } catch(e) {
@@ -110,6 +111,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
             await ChainStatisticsDao.updateTxCount(chainStatistics.txCount);
         }
         ret.result = true;
+//        console.log(chainStatistics);
     } catch(e) {
         console.log("traversal Txs error", e);
     }
