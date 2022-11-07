@@ -4,7 +4,7 @@ const chainStatistics = require("../dao/ChainStatisticsDao");
 const chainMonitor = require("./ChainMonitor");
 
 
-class ChainStatisticsService {
+class ChainService {
 
 	constructor() {
 		this.init = this.init.bind(this);
@@ -21,6 +21,6 @@ class ChainStatisticsService {
 
 }
 
-let csInstance = new ChainStatisticsService();
+let csInstance = new ChainService();
 csInstance.init();
 module.exports = csInstance;

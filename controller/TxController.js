@@ -2,20 +2,21 @@ const BaseComponent = require('../prototype/BaseComponent');
 const ResponseCode = require("../utils/ResponseCode");
 const ResponseModel = require("../utils/ResponseModel");
 const ResponseCodeError = require("../utils/ResponseCodeError");
-const chainService = require("../service/ChainService");
-const MyUtils = require("../utils/MyUtils");
+const txService = require("../service/TxService");
 
-class ChainController extends BaseComponent {
+class TxController extends BaseComponent {
 
 	constructor() {
 		super();
+		this.queryTxSummary = this.queryTxSummary.bind(this);
 	}
 
-	async queryChainSummary(req, res, next) {
+	async queryTxSummary(req, res, next) {
 		let that = this;
 		let resJson = null;
+		let txHash = req.body["txHash"];
 		try {
-			let retData = await chainService.getChainStatisticsInfo();
+			let retData = await txService.getTxRecordByTxHash(txHash);
 			resJson = new ResponseModel(ResponseCode.SUCCESS, retData);
 		} catch (e) {
 			console.log(e);
@@ -26,4 +27,4 @@ class ChainController extends BaseComponent {
 
 }
 
-module.exports = new ChainController();
+module.exports = new TxController();

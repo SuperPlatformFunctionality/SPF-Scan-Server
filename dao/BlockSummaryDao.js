@@ -1,8 +1,8 @@
 const DataTypes = require("sequelize").DataTypes;
 const Op = require("sequelize").Op;
-const lindb = require("./linkDb");
+const linkDb = require("./linkDb");
 const MyUtils = require("../utils/MyUtils");
-const sequelize = lindb.sequelize;
+const sequelize = linkDb.sequelize;
 const moment =require("moment");
 
 const BlockSummaryDao = sequelize.define('BlockSummaryDao', {

@@ -1,7 +1,7 @@
 const DataTypes = require("sequelize").DataTypes;
 const Op = require("sequelize").Op;
-const lindb = require("./linkDb");
-const sequelize = lindb.sequelize;
+const linkDb = require("./linkDb");
+const sequelize = linkDb.sequelize;
 
 const ChainStatisticsDao = sequelize.define('ChainStatisticsDao', {
     id: {

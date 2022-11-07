@@ -17,7 +17,7 @@ CREATE TABLE `block_summary` (
     `block_no` bigint(10) unsigned NOT NULL,  -- from 0
     `block_hash_substrate` varchar(128) NOT NULL,
     `block_hash_evm` varchar(128) NOT NULL,
-    `validator` varchar(36) NOT NULL DEFAULT "unknown",
+    `validator` varchar(42) NOT NULL DEFAULT "unknown",
     `block_ts` bigint(16) unsigned NOT NULL, -- block timestamp
     PRIMARY KEY `pk_block_no`(`block_no`) USING BTREE,
     UNIQUE INDEX `uk_block_hash_substrate`(`block_hash_substrate`) USING BTREE,
@@ -25,14 +25,23 @@ CREATE TABLE `block_summary` (
     INDEX `idx_validator`(`validator`) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `tx_transfer` (
+CREATE TABLE `account` (
+    `account_address` varchar(128) NOT NULL,
+    `nick_name` varchar(32) NOT NULL,
+    `init_block_no` bigint(16) unsigned NOT NULL,  -- from 0
+    `balance` bigint(30) unsigned NOT NULL,
+    PRIMARY KEY `pk_account_address`(`account_address`) USING BTREE,
+    INDEX `idx_nick_name`(`nick_name`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tx_record` (
     `tx_hash` varchar(128) NOT NULL,
     `block_no` bigint(16) unsigned NOT NULL,  -- from 0
-    `block_hash` varchar(128) NOT NULL,
-    `block_ts` bigint(16) unsigned NOT NULL, -- block timestamp
-    `address_from` varchar(128) NOT NULL,
-    `address_to` varchar(128) NOT NULL,
-    `value` bigint(30) NOT NULL,
+    `block_ts` bigint(16) unsigned NOT NULL,  -- block timestamp
+    `tx_type` varchar(32) NOT NULL,
+    `address_from` varchar(42) NOT NULL,
+    `address_to` varchar(42) NOT NULL,
+    `value` bigint(30) unsigned NOT NULL,
     PRIMARY KEY `pk_tx_hash`(`tx_hash`) USING BTREE,
     INDEX `idx_block_no`(`block_no`) USING BTREE,
     INDEX `idx_address_from`(`address_from`) USING BTREE,

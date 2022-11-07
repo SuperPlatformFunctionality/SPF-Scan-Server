@@ -1,9 +1,9 @@
 const DataTypes = require("sequelize").DataTypes;
 const Op = require("sequelize").Op;
-const lindb = require("./linkDb");
-const sequelize = lindb.sequelize;
+const linkDb = require("./linkDb");
+const sequelize = linkDb.sequelize;
 
-const TxTransferDao = sequelize.define('TxTransferDao', {
+const TxRecordDao = sequelize.define('TxRecordDao', {
 	txHash: {
 		type:DataTypes.STRING(128),
 		primaryKey:true,
@@ -13,13 +13,13 @@ const TxTransferDao = sequelize.define('TxTransferDao', {
 		type:DataTypes.BIGINT.UNSIGNED,
 		field:"block_no"
 	},
-	blockHash: {
-		type:DataTypes.STRING(128),
-		field:"block_hash"
-	},
 	blockTs: {
 		type:DataTypes.BIGINT.UNSIGNED,
 		field:"block_ts"
+	},
+	txType: {
+		type:DataTypes.STRING(32),
+		field:"tx_type"
 	},
 	addressFrom: {
 		type:DataTypes.STRING(128),
@@ -35,13 +35,13 @@ const TxTransferDao = sequelize.define('TxTransferDao', {
 	}
 }, {
     // Other model options go here
-    tableName: 'tx_transfer',
+    tableName: 'tx_record',
     timestamps: false
 });
 
-async function newTxTransferRecord(txHash,blockNo,blockHash,blockTs,addressFrom,addressTo,value,transaction) {
-    let newSFModel = await TxTransferDao.create({
-		txHash,blockNo,blockHash,blockTs,addressFrom,addressTo,value
+async function newTxRecord(txHash,blockNo,blockTs,txType,addressFrom,addressTo,value,transaction) {
+    let newSFModel = await TxRecordDao.create({
+		txHash,blockNo,blockTs,txType,addressFrom,addressTo,value
     },{
         transaction:transaction,
         logging:false
@@ -53,10 +53,10 @@ async function newTxTransferRecord(txHash,blockNo,blockHash,blockTs,addressFrom,
     return newSFObj;
 }
 
-async function getTxTransferByTxHash(txHash, transaction, forUpdate) {
+async function getTxRecordByTxHash(txHash, transaction, forUpdate) {
 	let whereObj = {"txHash": txHash}
 	let recObj = null;
-	let ttRecords = await _getTxTransferBySomeProperty(whereObj, transaction, forUpdate);
+	let ttRecords = await _getTxRecordsBySomeProperty(whereObj, transaction, forUpdate);
 	if(ttRecords.length > 0) {
 		recObj = ttRecords[0];
 	}
@@ -68,7 +68,13 @@ async function getTxTransferByTxHash(txHash, transaction, forUpdate) {
 	return recObj;
 }
 
-async function _getTxTransferBySomeProperty(whereObj, transaction, forUpdate) {
+async function getTxRecordsByAccount(accountAddress, transaction, forUpdate) {
+	let whereObj = {"addressFrom": accountAddress, "addressTo":accountAddress};
+	let ttRecords = await _getTxRecordsBySomeProperty(whereObj, transaction, forUpdate);
+	return ttRecords;
+}
+
+async function _getTxRecordsBySomeProperty(whereObj, transaction, forUpdate) {
 	let options = {
 		logging:false
 	}
@@ -81,7 +87,7 @@ async function _getTxTransferBySomeProperty(whereObj, transaction, forUpdate) {
 		}
 	}
 
-	let tgtTTModels = await TxTransferDao.findAll(options);
+	let tgtTTModels = await TxRecordDao.findAll(options);
 	let recordObjs = [];
 	for(let i = 0 ; i < tgtTTModels.length; i++) {
 		let tmpModel = tgtTTModels[i];
@@ -91,5 +97,6 @@ async function _getTxTransferBySomeProperty(whereObj, transaction, forUpdate) {
 	return recordObjs;
 }
 
-exports.newTxTransferRecord = newTxTransferRecord;
-exports.getTxTransferByTxHash = getTxTransferByTxHash;
+exports.newTxRecord = newTxRecord;
+exports.getTxRecordByTxHash = getTxRecordByTxHash;
+exports.getTxRecordsByAccount = getTxRecordsByAccount;
