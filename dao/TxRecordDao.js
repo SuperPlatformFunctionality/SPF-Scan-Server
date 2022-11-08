@@ -69,7 +69,12 @@ async function getTxRecordByTxHash(txHash, transaction, forUpdate) {
 }
 
 async function getTxRecordsByAccount(accountAddress, transaction, forUpdate) {
-	let whereObj = {"addressFrom": accountAddress, "addressTo":accountAddress};
+	let whereObj =  {
+		[Op.or]: [
+			{ addressFrom: accountAddress },
+			{ addressTo: accountAddress }
+		]
+	}
 	let ttRecords = await _getTxRecordsBySomeProperty(whereObj, transaction, forUpdate);
 	return ttRecords;
 }
