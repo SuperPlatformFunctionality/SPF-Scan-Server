@@ -13,7 +13,9 @@ const TxRecordDao = require("../dao/TxRecordDao");
 Decimal.set({ precision: 30 });
 
 let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
-    console.log("[" + blkNumberStart + "-" + blkNumberEnd + "]----start----" + new Date());
+    let blockNoTitleTip = (blkNumberStart == blkNumberEnd)?`${blkNumberStart}`:`&${blkNumberStart}-${blkNumberEnd}`
+    console.log("[" + blockNoTitleTip + "]----start----" + new Date());
+//    console.log("[" + blkNumberStart + "-" + blkNumberEnd + "]----start----" + new Date());
     let ret = {result:false};
 
     let polkadotApi = await polkadotJsConfig.getPolkadotApiObjHttp();
@@ -112,7 +114,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
         console.log("traversal Txs error", e);
     }
 
-    console.log("[" + blkNumberStart + "-" + blkNumberEnd + "]----end----" + new Date());
+    console.log("[" + blockNoTitleTip + "]----end----" + new Date());
     return ret;
 }
 
@@ -132,7 +134,7 @@ let chainStatistics = {
     accountCount:0,
     contractCount:0
 };
-const BLOCK_TRAVEL_LEGHTH = 5;
+const BLOCK_TRAVEL_LEGHTH = 1;
 let startMonitorLoop = async function() {
     chainStatistics = await ChainStatisticsDao.getChainStatisticsInfo();
     let curBlkNoStart = chainStatistics.currentBlockNo;
@@ -140,8 +142,8 @@ let startMonitorLoop = async function() {
     do {
         try {
             let latestBlkNoInMainChain = await web3Instance.eth.getBlockNumber();
-            if(curBlkNoEnd + 3 >= latestBlkNoInMainChain) {
-                const sleepSecs = 5;
+            if(curBlkNoEnd + 1 >= latestBlkNoInMainChain) {
+                const sleepSecs = 3;
                 console.log("----sleep " + sleepSecs + " seconds and waiting for ethereum produces more blocks---");
                 await myUtils.sleepForMillisecond(sleepSecs * 1000);
                 continue;
