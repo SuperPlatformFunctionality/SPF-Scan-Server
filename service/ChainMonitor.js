@@ -88,7 +88,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
 //                let tempMsgString = JSON.stringify(tmpTx);
                 await TxRecordDao.newTxRecord(tmpTx.txHash, tmpTx.blockNo,
                                             tmpTx.timestamp, "transfer",
-                                            tmpTx.from, tmpTx.to, tmpTx.value);
+                                            tmpTx.from, tmpTx.to, new Decimal(tmpTx.value).toFixed());
                 txCountAdded++;
 
                 console.log("do new account record");
@@ -99,7 +99,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
             }
         }
 
-        chainStatistics.currentBlockNo = blkNumberEnd;
+        chainStatistics.currentBlockNo = blkNumberStart;
         if(acntCountAdded > 0) {
             chainStatistics.accountCount += acntCountAdded;
             await ChainStatisticsDao.updateAccountCount(chainStatistics.accountCount);

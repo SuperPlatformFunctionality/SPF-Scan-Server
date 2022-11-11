@@ -3,9 +3,14 @@ const linkDb = require("./linkDb");
 const sequelize = linkDb.sequelize;
 
 const AccountDao = sequelize.define('AccountDao', {
+	id: {
+		type:DataTypes.BIGINT.UNSIGNED,
+		primaryKey:true,
+		autoIncrement:true,
+		field:"id"
+	},
 	accountAddress: {
 		type:DataTypes.STRING(128),
-		primaryKey:true,
 		field:"account_address"
 	},
 	nickName: {

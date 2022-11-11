@@ -26,15 +26,18 @@ CREATE TABLE `block_summary` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `account` (
+    `id` bigint(16) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
     `account_address` varchar(128) NOT NULL,
     `nick_name` varchar(32) NOT NULL,
     `init_block_no` bigint(16) unsigned NOT NULL,  -- from 0
     `balance` varchar(32) DEFAULT '0',
-    PRIMARY KEY `pk_account_address`(`account_address`) USING BTREE,
+    PRIMARY KEY `pk_id`(`id`) USING BTREE,
+    INDEX `idx_account_address`(`account_address`) USING BTREE,
     INDEX `idx_nick_name`(`nick_name`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `tx_record` (
+    `id` bigint(16) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
     `tx_hash` varchar(128) NOT NULL,
     `block_no` bigint(16) unsigned NOT NULL,  -- from 0
     `block_ts` bigint(16) unsigned NOT NULL,  -- block timestamp
@@ -42,8 +45,9 @@ CREATE TABLE `tx_record` (
     `address_from` varchar(42) NOT NULL,
     `address_to` varchar(42) NOT NULL,
     `value` varchar(32) NOT NULL,
-    PRIMARY KEY `pk_tx_hash`(`tx_hash`) USING BTREE,
+    PRIMARY KEY `pk_id`(`id`) USING BTREE,
+    INDEX `idx_tx_hash`(`tx_hash`) USING BTREE,
     INDEX `idx_block_no`(`block_no`) USING BTREE,
     INDEX `idx_address_from`(`address_from`) USING BTREE,
     INDEX `idx_address_to`(`address_to`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

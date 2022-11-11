@@ -4,9 +4,14 @@ const linkDb = require("./linkDb");
 const sequelize = linkDb.sequelize;
 
 const TxRecordDao = sequelize.define('TxRecordDao', {
+	id: {
+		type:DataTypes.BIGINT.UNSIGNED,
+		primaryKey:true,
+		autoIncrement:true,
+		field:"id"
+	},
 	txHash: {
 		type:DataTypes.STRING(128),
-		primaryKey:true,
 		field:"tx_hash"
 	},
 	blockNo: {
