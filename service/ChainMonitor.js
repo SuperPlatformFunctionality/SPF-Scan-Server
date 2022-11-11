@@ -13,7 +13,7 @@ const TxRecordDao = require("../dao/TxRecordDao");
 Decimal.set({ precision: 30 });
 
 let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
-    let blockNoTitleTip = (blkNumberStart == blkNumberEnd)?`${blkNumberStart}`:`&${blkNumberStart}-${blkNumberEnd}`
+    let blockNoTitleTip = (blkNumberStart == blkNumberEnd)?`${blkNumberStart}`:`${blkNumberStart}-${blkNumberEnd}`
     console.log("[" + blockNoTitleTip + "]----start----" + new Date());
 //    console.log("[" + blkNumberStart + "-" + blkNumberEnd + "]----start----" + new Date());
     let ret = {result:false};
@@ -25,7 +25,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
 
             //get block by polkadot.js
             let blockHashSubstrate = await polkadotApi.rpc.chain.getBlockHash(travelNo);
-            let blockSubstrate = await polkadotApi.rpc.chain.getBlock(blockHashSubstrate);
+            //let blockSubstrate = await polkadotApi.rpc.chain.getBlock(blockHashSubstrate); //node not archive??
 //            console.log(blockHashSubstrate.toString());
 //            console.log(blockSubstrate.toString());
 
