@@ -5,6 +5,7 @@ class BlockService {
 		this.init = this.init.bind(this);
 		this.getBlockSummaryByBlockHeight = this.getBlockSummaryByBlockHeight.bind(this);
 		this.getBlockSummaryByBlockHash = this.getBlockSummaryByBlockHash.bind(this);
+		this.getBlockSummaries = this.getBlockSummaries.bind(this);
 	}
 
 	async init() {
@@ -21,6 +22,11 @@ class BlockService {
 		if(bs == null) {
 			bs = await BlockSummaryDao.getBlockSummaryByBlockHashSubstrate(blockHash);
 		}
+		return bs;
+	}
+
+	async getBlockSummaries(pageIdx, pageSize) {
+		let bs = await BlockSummaryDao.getBlockSummaries(pageIdx, pageSize);
 		return bs;
 	}
 

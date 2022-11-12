@@ -4,6 +4,6 @@ const blockController = require('../controller/BlockController.js');
 
 const router = express.Router();
 router.post('/summary',  blockController.queryBlockSummary);
-//router.post('/price',  blockController.queryBlockSummary);
+router.post('/summaries',  blockController.queryBlockSummaries);
 
 module.exports = router

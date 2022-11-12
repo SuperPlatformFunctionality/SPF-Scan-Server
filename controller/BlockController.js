@@ -44,6 +44,22 @@ class BlockController extends BaseComponent {
 		res.send(resJson);
 	}
 
+	async queryBlockSummaries(req, res, next) {
+		let that = this;
+		let resJson = null;
+		let pageIndex = req.body["pageIndex"] || 0;
+		let pageSize = req.body["pageSize"] || 20;
+		let validator = req.body["validator"];
+		try {
+			let retData = await blockService.getBlockSummaries(pageIndex, pageSize);
+			resJson = new ResponseModel(ResponseCode.SUCCESS, retData);
+		} catch (e) {
+			console.log(e);
+			resJson = new ResponseModel((e instanceof ResponseCodeError)?e.respondCode:ResponseCode.SYSTEM_ERROR);
+		}
+		res.send(resJson);
+	}
+
 }
 
 module.exports = new BlockController();
