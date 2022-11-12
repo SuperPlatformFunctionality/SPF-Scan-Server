@@ -117,37 +117,56 @@
     request: 
     POST /account/tx/history
     {
-        "address":"SPFHiwAcPNSyc641exgxJXF9pKshKHPDQBNm" //target SPF wallet address
+        "address" : "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC", //target SPF wallet address
+        "pageIndex":0,
+        "pageSize":5
     }
 
     response
     {
         "code": "0000",
         "msg": "success",
-        "data": [{
-                "txHash": "0x02bf93abe2fb1c37eb08158bee6c02cdff19d02bf33b1b5c4876378b8a40be30",
-                "blockNo": 92,
-                "blockTs": 1667880720,
-                "txType": "transfer",
-                "addressFrom": "SPFHiwAcPNSyc641exgxJXF9pKshKHPDQBNm",
-                "addressTo": "SPFT6ZmEfrbLoZgb31LTjFaLCvSA9eYSpzkt",
-                "value": "100000000000000000000"
-            }, {
-                "txHash": "0x30530b8415b119972e0b43097b1b86f57e11f0d0833ab50aa73e3d47171d6152",
-                "blockNo": 898,
-                "blockTs": 1667885556,
+        "data": [
+            {
+                "txHash": "0x3c10f3e81a93ca53b421bea9afa71025e79d9b9526455bda4862ef0db627404a",
+                "blockNo": 243,
+                "blockTs": 1668269750,
                 "txType": "transfer",
                 "addressFrom": "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC",
                 "addressTo": "SPFHiwAcPNSyc641exgxJXF9pKshKHPDQBNm",
-                "value": "50000000000000000000"
-            }, {
-                "txHash": "0x93017f69519c4b79cc49151df7aa18cc47adb13fc50f8aa53fbabd1d94260940",
-                "blockNo": 65,
-                "blockTs": 1667880558,
-                "txType": "transfer",
-                "addressFrom": "SPFHiwAcPNSyc641exgxJXF9pKshKHPDQBNm",
-                "addressTo": "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC",
                 "value": "200000000000000000000"
+            }, {
+                "txHash": "0x5e27f9522ed22ad1fd765222beecd30f42b2af6c117d27ab30c19c9e6799128e",
+                "blockNo": 240,
+                "blockTs": 1668269732,
+                "txType": "transfer",
+                "addressFrom": "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC",
+                "addressTo": "SPFK4wda1j6tQCv1HiT7dALH3cKqnZzUyt6Z",
+                "value": "230000000000000000"
+            }, {
+                "txHash": "0x5c0eb40dcddac80e31c7ef450b11d924d7c33312dc623eb9aa12801f3e53d2f1",
+                "blockNo": 237,
+                "blockTs": 1668269714,
+                "txType": "transfer",
+                "addressFrom": "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC",
+                "addressTo": "SPFK4wda1j6tQCv1HiT7dALH3cKqnZzUyt6Z",
+                "value": "10000000000000000000"
+            }, {
+                "txHash": "0xc6961bd95a6c7d87cf89dcd649a4e41843159fdd150d9105acbd1a5ef244c483",
+                "blockNo": 43,
+                "blockTs": 1668268550,
+                "txType": "transfer",
+                "addressFrom": "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC",
+                "addressTo": "SPFK4wda1j6tQCv1HiT7dALH3cKqnZzUyt6Z",
+                "value": "5000000000000000000"
+            }, {
+                "txHash": "0xb8761e28cfd92d668cfac2bd21b64b9af5caaa7e6bceb2486822717ea8cab576",
+                "blockNo": 30,
+                "blockTs": 1668268472,
+                "txType": "transfer",
+                "addressFrom": "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC",
+                "addressTo": "SPFLN3jTY1S3vTFAg1sqY2n9RncaPjS3ZDyo",
+                "value": "500000000000000000000"
             }
         ]
     }
