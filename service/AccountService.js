@@ -17,8 +17,8 @@ class AccountService {
 		return tx;
 	}
 
-	async getTxRecordsByAccount(accountAddress) {
-		let tx = await TxRecordDao.getTxRecordsByAccount(accountAddress);
+	async getTxRecordsByAccount(accountAddress, pageIdx, pageSize) {
+		let tx = await TxRecordDao.getTxRecordsByAccount(accountAddress, pageIdx, pageSize);
 		return tx;
 	}
 
