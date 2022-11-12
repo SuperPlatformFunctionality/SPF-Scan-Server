@@ -61,7 +61,7 @@ async function newTxRecord(txHash,blockNo,blockTs,txType,addressFrom,addressTo,v
 async function getTxRecordByTxHash(txHash, transaction, forUpdate) {
 	let whereObj = {"txHash": txHash}
 	let recObj = null;
-	let ttRecords = await _getTxRecordsBySomeProperty(whereObj, transaction, forUpdate);
+	let ttRecords = await _getTxRecordsBySomeProperty(whereObj, 0, 0, transaction, forUpdate);
 	if(ttRecords.length > 0) {
 		recObj = ttRecords[0];
 	}
@@ -73,28 +73,39 @@ async function getTxRecordByTxHash(txHash, transaction, forUpdate) {
 	return recObj;
 }
 
-async function getTxRecordsByAccount(accountAddress, transaction, forUpdate) {
+async function getTxRecords(pageIdx, pageSize, transaction, forUpdate) {
+	let whereObj =  {}
+	let ttRecords = await _getTxRecordsBySomeProperty(whereObj, pageIdx, pageSize, transaction, forUpdate);
+	return ttRecords;
+}
+
+async function getTxRecordsByAccount(accountAddress, pageIdx, pageSize, transaction, forUpdate) {
 	let whereObj =  {
 		[Op.or]: [
 			{ addressFrom: accountAddress },
 			{ addressTo: accountAddress }
 		]
 	}
-	let ttRecords = await _getTxRecordsBySomeProperty(whereObj, transaction, forUpdate);
+	let ttRecords = await _getTxRecordsBySomeProperty(whereObj, pageIdx, pageSize, transaction, forUpdate);
 	return ttRecords;
 }
 
-async function _getTxRecordsBySomeProperty(whereObj, transaction, forUpdate) {
+async function _getTxRecordsBySomeProperty(whereObj, pageIdx, pageSize, transaction, forUpdate) {
 	let options = {
 		logging:false
 	}
 	options.where = whereObj;
-
 	if(transaction != null) {
 		options.transaction = transaction;
 		if(forUpdate != null) {
 			options.lock = forUpdate?transaction.LOCK.UPDATE:transaction.LOCK.SHARE;
 		}
+	}
+	options.order = [["id", "DESC"]]
+
+	if(pageIdx != null && pageSize != null && pageSize > 0) {
+		options.offset = pageSize * pageIdx;
+		options.limit = pageSize;
 	}
 
 	let tgtTTModels = await TxRecordDao.findAll(options);
@@ -109,4 +120,5 @@ async function _getTxRecordsBySomeProperty(whereObj, transaction, forUpdate) {
 
 exports.newTxRecord = newTxRecord;
 exports.getTxRecordByTxHash = getTxRecordByTxHash;
+exports.getTxRecords = getTxRecords;
 exports.getTxRecordsByAccount = getTxRecordsByAccount;

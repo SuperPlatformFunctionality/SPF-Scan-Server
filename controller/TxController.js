@@ -9,14 +9,28 @@ class TxController extends BaseComponent {
 	constructor() {
 		super();
 		this.queryTxSummary = this.queryTxSummary.bind(this);
+		this.queryTxList = this.queryTxList.bind(this);
 	}
 
 	async queryTxSummary(req, res, next) {
-		let that = this;
 		let resJson = null;
 		let txHash = req.body["txHash"];
 		try {
 			let retData = await txService.getTxRecordByTxHash(txHash);
+			resJson = new ResponseModel(ResponseCode.SUCCESS, retData);
+		} catch (e) {
+			console.log(e);
+			resJson = new ResponseModel((e instanceof ResponseCodeError)?e.respondCode:ResponseCode.SYSTEM_ERROR);
+		}
+		res.send(resJson);
+	}
+
+	async queryTxList(req, res, next) {
+		let resJson = null;
+		let pageIndex = req.body["pageIndex"] || 0;
+		let pageSize = req.body["pageSize"] || 20;
+		try {
+			let retData = await txService.getTxRecords(pageIndex, pageSize);
 			resJson = new ResponseModel(ResponseCode.SUCCESS, retData);
 		} catch (e) {
 			console.log(e);

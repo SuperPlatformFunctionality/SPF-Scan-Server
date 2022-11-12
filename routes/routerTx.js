@@ -4,6 +4,6 @@ const txController = require('../controller/TxController');
 
 const router = express.Router();
 router.post('/summary',  txController.queryTxSummary);
-//router.post('/price',  blockController.queryBlockSummary);
+router.post('/list',  txController.queryTxList);
 
 module.exports = router
