@@ -92,7 +92,10 @@ async function getTxRecordsByAccount(accountAddress, pageIdx, pageSize, transact
 
 async function _getTxRecordsBySomeProperty(whereObj, pageIdx, pageSize, transaction, forUpdate) {
 	let options = {
-		logging:false
+		logging:false,
+		attributes:{
+			exclude:["id"]
+		}
 	}
 	options.where = whereObj;
 	if(transaction != null) {
