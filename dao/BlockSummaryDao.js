@@ -82,21 +82,33 @@ async function _getBlockSummaryBySomeProperty(whereObj, transaction, forUpdate) 
 	return tgtBSObj;
 }
 
-async function getBlockSummariesByValidator(validator, transaction, forUpdate) {
-	let whereObj = {"validator": validator}
-	return await _getBlockSummariesBySomeProperty(whereObj, transaction, forUpdate);
+async function getBlockSummaries(pageIdx, pageSize, transaction, forUpdate) {
+	let whereObj = {}
+	return await _getBlockSummariesBySomeProperty(whereObj, pageIdx, pageSize, transaction, forUpdate);
 }
 
-async function _getBlockSummariesBySomeProperty(whereObj, transaction, forUpdate) {
+async function getBlockSummariesByValidator(validator, pageIdx, pageSize, transaction, forUpdate) {
+	let whereObj = {"validator": validator}
+	return await _getBlockSummariesBySomeProperty(whereObj, pageIdx, pageSize, transaction, forUpdate);
+}
+
+async function _getBlockSummariesBySomeProperty(whereObj, pageIdx, pageSize, transaction, forUpdate) {
 	let options = {
 		logging:false
 	}
+
+	options.order = [["block_no", "DESC"]];
 	options.where = whereObj;
 	if(transaction != null) {
 		options.transaction = transaction;
 		if(forUpdate != null) {
 			options.lock = forUpdate?transaction.LOCK.UPDATE:transaction.LOCK.SHARE;
 		}
+	}
+
+	if(pageIdx != null && pageSize != null && pageSize > 0) {
+		options.offset = pageSize * pageIdx;
+		options.limit = pageSize;
 	}
 
 	let tgtBSModels = await BlockSummaryDao.findAll(options);
@@ -114,5 +126,14 @@ exports.newBlockSummary = newBlockSummary;
 exports.getBlockSummaryByBlockNo = getBlockSummaryByBlockNo;
 exports.getBlockSummaryByBlockHashSubstrate = getBlockSummaryByBlockHashSubstrate;
 exports.getBlockSummaryByBlockHashEvm = getBlockSummaryByBlockHashEvm;
+exports.getBlockSummaries = getBlockSummaries;
 exports.getBlockSummariesByValidator = getBlockSummariesByValidator;
 
+/*
+let test = async function() {
+	let whereObj = {};
+	let items = await getBlockSummaries(0, 10);
+	console.log(items);
+}
+test();
+*/
