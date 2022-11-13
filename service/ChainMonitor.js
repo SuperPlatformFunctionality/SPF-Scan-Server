@@ -31,7 +31,10 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
 
             //get block by web3.js
             let blkInfoEvm = await web3Instance.eth.getBlock(travelNo, true);
-//            console.log(blkInfoEvm);
+            if(blkInfoEvm == null) { //why get block with parameter some block no, will get null ????
+                continue;
+            }
+            //console.log(blkInfoEvm);
             const blockHashEvm = blkInfoEvm.hash;
             const blockValidator = myUtils.transferAddressFromEthToSPF(blkInfoEvm.miner.toLowerCase());
             const ts = blkInfoEvm.timestamp;

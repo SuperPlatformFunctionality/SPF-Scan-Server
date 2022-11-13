@@ -121,7 +121,43 @@ async function _getTxRecordsBySomeProperty(whereObj, pageIdx, pageSize, transact
 	return recordObjs;
 }
 
+async function getTxRecordsCountByAccount(accountAddress, transaction, forUpdate) {
+	let whereObj =  {
+		[Op.or]: [
+			{ addressFrom: accountAddress },
+			{ addressTo: accountAddress }
+		]
+	}
+	return  await _getTxRecordsCountBySomeProperty(whereObj, transaction, forUpdate);
+}
+
+async function _getTxRecordsCountBySomeProperty(whereObj, transaction, forUpdate) {
+	let options = {
+		logging:false
+	}
+	options.where = whereObj;
+	if(transaction != null) {
+		options.transaction = transaction;
+		if(forUpdate != null) {
+			options.lock = forUpdate?transaction.LOCK.UPDATE:transaction.LOCK.SHARE;
+		}
+	}
+
+	let cnt = await TxRecordDao.count(options);
+	return cnt;
+}
+
 exports.newTxRecord = newTxRecord;
 exports.getTxRecordByTxHash = getTxRecordByTxHash;
 exports.getTxRecords = getTxRecords;
 exports.getTxRecordsByAccount = getTxRecordsByAccount;
+
+exports.getTxRecordsCountByAccount = getTxRecordsCountByAccount;
+
+/*
+let test = async function() {
+	let cnt = await getTxRecordsCountByAccount("SPFLN3jTY1S3vTFAg1sqY2n9RncaPjS3ZDyo");
+	console.log(cnt);
+}
+test();
+*/
