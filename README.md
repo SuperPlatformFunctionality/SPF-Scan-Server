@@ -113,65 +113,20 @@
         }
     }
 
-#### get account tx history
-    request: 
-    POST /account/tx/history
+### about Tx(Transaction)
+### get Tx Count By Address
+    request:
+    POST /tx/count
     {
-        "address" : "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC", //target SPF wallet address
-        "pageIndex":0,
-        "pageSize":5
+        "address":"SPFLN3jTY1S3vTFAg1sqY2n9RncaPjS3ZDyo"
     }
-
     response
     {
         "code": "0000",
         "msg": "success",
-        "data": [
-            {
-                "txHash": "0x3c10f3e81a93ca53b421bea9afa71025e79d9b9526455bda4862ef0db627404a",
-                "blockNo": 243,
-                "blockTs": 1668269750,
-                "txType": "transfer",
-                "addressFrom": "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC",
-                "addressTo": "SPFHiwAcPNSyc641exgxJXF9pKshKHPDQBNm",
-                "value": "200000000000000000000"
-            }, {
-                "txHash": "0x5e27f9522ed22ad1fd765222beecd30f42b2af6c117d27ab30c19c9e6799128e",
-                "blockNo": 240,
-                "blockTs": 1668269732,
-                "txType": "transfer",
-                "addressFrom": "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC",
-                "addressTo": "SPFK4wda1j6tQCv1HiT7dALH3cKqnZzUyt6Z",
-                "value": "230000000000000000"
-            }, {
-                "txHash": "0x5c0eb40dcddac80e31c7ef450b11d924d7c33312dc623eb9aa12801f3e53d2f1",
-                "blockNo": 237,
-                "blockTs": 1668269714,
-                "txType": "transfer",
-                "addressFrom": "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC",
-                "addressTo": "SPFK4wda1j6tQCv1HiT7dALH3cKqnZzUyt6Z",
-                "value": "10000000000000000000"
-            }, {
-                "txHash": "0xc6961bd95a6c7d87cf89dcd649a4e41843159fdd150d9105acbd1a5ef244c483",
-                "blockNo": 43,
-                "blockTs": 1668268550,
-                "txType": "transfer",
-                "addressFrom": "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC",
-                "addressTo": "SPFK4wda1j6tQCv1HiT7dALH3cKqnZzUyt6Z",
-                "value": "5000000000000000000"
-            }, {
-                "txHash": "0xb8761e28cfd92d668cfac2bd21b64b9af5caaa7e6bceb2486822717ea8cab576",
-                "blockNo": 30,
-                "blockTs": 1668268472,
-                "txType": "transfer",
-                "addressFrom": "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC",
-                "addressTo": "SPFLN3jTY1S3vTFAg1sqY2n9RncaPjS3ZDyo",
-                "value": "500000000000000000000"
-            }
-        ]
+        "data": 3
     }
 
-### about Tx(Transaction)
 ### get Tx Summary
     request: 
     POST /tx/summary
@@ -193,12 +148,13 @@
         }
     }
 
-### get Tx Summaries (Summary List)
+### get Tx Summaries (Summary History)
     request: 
-    POST /tx/list
+    POST /tx/history
     {
         "pageIndex":0,
-        "pageSize":5
+        "pageSize":5,
+        "address":"SPFLN3jTY1S3vTFAg1sqY2n9RncaPjS3ZDyo"  //optional, if not provided ,server will query in all tx.
     }
     response
     {
@@ -206,22 +162,6 @@
         "msg": "success",
         "data": [
             {
-                "txHash": "0x90c1b01174f558971e230db1c3806c22c8920370fef7ec45e64ab17170699f4e",
-                "blockNo": 46,
-                "blockTs": 1668268568,
-                "txType": "transfer",
-                "addressFrom": "SPFK4wda1j6tQCv1HiT7dALH3cKqnZzUyt6Z",
-                "addressTo": "SPFFDTy4snKvE6xH61UAeQx5xoG5mFhSaoTD",
-                "value": "1500000000000000000"
-            }, {
-                "txHash": "0xc6961bd95a6c7d87cf89dcd649a4e41843159fdd150d9105acbd1a5ef244c483",
-                "blockNo": 43,
-                "blockTs": 1668268550,
-                "txType": "transfer",
-                "addressFrom": "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC",
-                "addressTo": "SPFK4wda1j6tQCv1HiT7dALH3cKqnZzUyt6Z",
-                "value": "5000000000000000000"
-            }, {
                 "txHash": "0x49ea0422d9a1107e0793dc29b72b385cc947926644282e2d56b45640b38dce77",
                 "blockNo": 39,
                 "blockTs": 1668268526,

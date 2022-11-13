@@ -9,8 +9,8 @@ class TxController extends BaseComponent {
 	constructor() {
 		super();
 		this.queryTxSummary = this.queryTxSummary.bind(this);
-		this.queryTxList = this.queryTxList.bind(this);
 		this.queryTxCount = this.queryTxCount.bind(this);
+		this.queryTxHistory = this.queryTxHistory.bind(this);
 	}
 
 	async queryTxSummary(req, res, next) {
@@ -18,20 +18,6 @@ class TxController extends BaseComponent {
 		let txHash = req.body["txHash"];
 		try {
 			let retData = await txService.getTxRecordByTxHash(txHash);
-			resJson = new ResponseModel(ResponseCode.SUCCESS, retData);
-		} catch (e) {
-			console.log(e);
-			resJson = new ResponseModel((e instanceof ResponseCodeError)?e.respondCode:ResponseCode.SYSTEM_ERROR);
-		}
-		res.send(resJson);
-	}
-
-	async queryTxList(req, res, next) {
-		let resJson = null;
-		let pageIndex = req.body["pageIndex"] || 0;
-		let pageSize = req.body["pageSize"] || 20;
-		try {
-			let retData = await txService.getTxRecords(pageIndex, pageSize);
 			resJson = new ResponseModel(ResponseCode.SUCCESS, retData);
 		} catch (e) {
 			console.log(e);
@@ -48,6 +34,26 @@ class TxController extends BaseComponent {
 				throw new ResponseCodeError(ResponseCode.PARAM_ERROR);
 			}
 			let retData = await txService.getCountOfTxRecords(address);
+			resJson = new ResponseModel(ResponseCode.SUCCESS, retData);
+		} catch (e) {
+			console.log(e);
+			resJson = new ResponseModel((e instanceof ResponseCodeError)?e.respondCode:ResponseCode.SYSTEM_ERROR);
+		}
+		res.send(resJson);
+	}
+
+	async queryTxHistory(req, res, next) {
+		let resJson = null;
+		let address = req.body["address"];
+		let pageIndex = req.body["pageIndex"] || 0;
+		let pageSize = req.body["pageSize"] || 20;
+		try {
+			let retData = null;
+			if(address == null || address == "") {
+				retData = await txService.getTxRecords(pageIndex, pageSize);
+			} else {
+				retData = await txService.getTxRecordsByAccount(address, pageIndex, pageSize)
+			}
 			resJson = new ResponseModel(ResponseCode.SUCCESS, retData);
 		} catch (e) {
 			console.log(e);

@@ -6,6 +6,7 @@ class TxService {
 		this.init = this.init.bind(this);
 		this.getTxRecordByTxHash = this.getTxRecordByTxHash.bind(this);
 		this.getTxRecords = this.getTxRecords.bind(this);
+		this.getTxRecordsByAccount = this.getTxRecordsByAccount.bind(this);
 		this.getCountOfTxRecords = this.getCountOfTxRecords.bind(this);
 	}
 
@@ -21,6 +22,11 @@ class TxService {
 	async getTxRecords(pageIdx, pageSize) {
 		let listTx = await TxRecordDao.getTxRecords(pageIdx, pageSize);
 		return listTx;
+	}
+
+	async getTxRecordsByAccount(accountAddress, pageIdx, pageSize) {
+		let tx = await TxRecordDao.getTxRecordsByAccount(accountAddress, pageIdx, pageSize);
+		return tx;
 	}
 
 	async getCountOfTxRecords(address) {
