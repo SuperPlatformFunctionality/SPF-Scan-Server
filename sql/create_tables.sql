@@ -46,10 +46,10 @@ CREATE TABLE `tx_record` (
     `address_to` varchar(42) NOT NULL,
     `value` varchar(32) NOT NULL,
     `nonce` bigint(10),
-    `gas_price` varchar(32), -- gwei
-    `gas_limit` varchar(32),
-    `gas_used`  varchar(32),
-    `tx_fee`    varchar(32), -- gwei
+    `gas_price` varchar(32) DEFAULT '', -- gwei
+    `gas_limit` varchar(32) DEFAULT '',
+    `gas_used`  varchar(32) DEFAULT '',
+    `tx_fee`    varchar(32) DEFAULT '', -- gwei
     PRIMARY KEY `pk_id`(`id`) USING BTREE,
     INDEX `idx_tx_hash`(`tx_hash`) USING BTREE,
     INDEX `idx_block_no`(`block_no`) USING BTREE,
