@@ -58,7 +58,7 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
                 let vGasPrice = tmpTx.gasPrice;
                 let vGasLimit = tmpTx.gas;
                 let txReceipt = await web3Instance.eth.getTransactionReceipt(tmpTx.hash);
-                let vGasUsed = txReceipt?txReceipt.gasUsed:null;
+                let vGasUsed = txReceipt?txReceipt.gasUsed:"0";
                 let vTxFee = new Decimal(vGasPrice).mul(new Decimal(vGasUsed)).toFixed();
 
                 let vNonce = tmpTx.nonce;
