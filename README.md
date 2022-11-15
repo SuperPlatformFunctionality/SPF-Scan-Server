@@ -131,20 +131,25 @@
     request: 
     POST /tx/summary
     {
-        "txHash" : "0x93017f69519c4b79cc49151df7aa18cc47adb13fc50f8aa53fbabd1d94260940"
+        "txHash" : "0x4594e07db96759b4533553bce5d3711df89171f3e33560321b52b2cce882b909"
     }
     response
     {
         "code": "0000",
         "msg": "success",
         "data": {
-            "txHash": "0x93017f69519c4b79cc49151df7aa18cc47adb13fc50f8aa53fbabd1d94260940",
-            "blockNo": 65,
-            "blockTs": 1667880558,
+            "txHash": "0x4594e07db96759b4533553bce5d3711df89171f3e33560321b52b2cce882b909",
+            "blockNo": 82,
+            "blockTs": 1668499701,
             "txType": "transfer",
             "addressFrom": "SPFHiwAcPNSyc641exgxJXF9pKshKHPDQBNm",
             "addressTo": "SPF7bLsyFKSazEuMuVodKZfty6fFpDiwdBpC",
-            "value": "200000000000000000000"
+            "value": "2000000000000000000000",
+            "nonce": 0,
+            "gasPrice": "2500000000",
+            "gasLimit": "21000",
+            "gasUsed": "21000",
+            "txFee": "52500000000000"
         }
     }
 

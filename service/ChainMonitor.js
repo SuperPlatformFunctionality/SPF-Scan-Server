@@ -55,7 +55,13 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
                 let tmpTx = allTxsThisBlock[i];
                 //console.log(tmpTx);
                 let vTxHash = tmpTx.hash;
-                let vValidator = blockValidator;
+                let txReceipt = await web3Instance.eth.getTransactionReceipt(tmpTx.hash);
+                let vGasPrice = tmpTx.gasPrice;
+                let vGasLimit = tmpTx.gas;
+                let vGasUsed = txReceipt.gasUsed;
+                let vTxFee = new Decimal(vGasPrice).mul(new Decimal(vGasUsed)).toFixed();
+
+                let vNonce = tmpTx.nonce;
                 let vFrom = myUtils.transferAddressFromEthToSPF(tmpTx.from.toLowerCase());
                 let vTo = myUtils.transferAddressFromEthToSPF(tmpTx.to.toLowerCase());
                 if(vTxHash == null || vFrom == null || vTo == null) {
@@ -72,10 +78,14 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
                     timestamp:ts,
                     blockHashSubstrate:blockHashSubstrate,
                     blockHashEvm:blockHashEvm,
-                    validator:vValidator,
                     from:vFrom,
                     to:vTo,
-                    value:vValue}
+                    value:vValue,
+                    nonce:vNonce,
+                    gasPrice:vGasPrice,
+                    gasLimit:vGasLimit,
+                    gasUsed:vGasUsed,
+                    txFee:vTxFee}
                 );
                 txsCntETH++;
             }
@@ -91,7 +101,8 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
 //                let tempMsgString = JSON.stringify(tmpTx);
                 await TxRecordDao.newTxRecord(tmpTx.txHash, tmpTx.blockNo,
                                             tmpTx.timestamp, "transfer",
-                                            tmpTx.from, tmpTx.to, new Decimal(tmpTx.value).toFixed());
+                                            tmpTx.from, tmpTx.to, new Decimal(tmpTx.value).toFixed(),
+                                            tmpTx.nonce, tmpTx.gasPrice, tmpTx.gasLimit, tmpTx.gasUsed, tmpTx.txFee);
                 txCountAdded++;
 
                 console.log("do new account record");

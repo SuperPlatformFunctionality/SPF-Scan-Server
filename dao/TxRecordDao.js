@@ -37,6 +37,26 @@ const TxRecordDao = sequelize.define('TxRecordDao', {
 	value: {
 		type:DataTypes.STRING(32),
 		field:"value"
+	},
+	nonce: {
+		type:DataTypes.BIGINT.UNSIGNED,
+		field:"nonce"
+	},
+	gasPrice: {
+		type:DataTypes.STRING(32),
+		field:"gas_price"
+	},
+	gasLimit: {
+		type:DataTypes.STRING(32),
+		field:"gas_limit"
+	},
+	gasUsed: {
+		type:DataTypes.STRING(32),
+		field:"gas_used"
+	},
+	txFee: {
+		type:DataTypes.STRING(32),
+		field:"tx_fee"
 	}
 }, {
     // Other model options go here
@@ -44,9 +64,9 @@ const TxRecordDao = sequelize.define('TxRecordDao', {
     timestamps: false
 });
 
-async function newTxRecord(txHash,blockNo,blockTs,txType,addressFrom,addressTo,value,transaction) {
+async function newTxRecord(txHash,blockNo,blockTs,txType,addressFrom,addressTo,value,nonce,gasPrice,gasLimit,gasUsed,txFee,transaction) {
     let newSFModel = await TxRecordDao.create({
-		txHash,blockNo,blockTs,txType,addressFrom,addressTo,value
+		txHash,blockNo,blockTs,txType,addressFrom,addressTo,value,nonce,gasPrice,gasLimit,gasUsed,txFee
     },{
         transaction:transaction,
         logging:false
