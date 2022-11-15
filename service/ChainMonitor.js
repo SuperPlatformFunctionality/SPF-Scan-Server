@@ -55,10 +55,10 @@ let travTxsFromSomeBlk = async function(blkNumberStart, blkNumberEnd) {
                 let tmpTx = allTxsThisBlock[i];
                 //console.log(tmpTx);
                 let vTxHash = tmpTx.hash;
-                let txReceipt = await web3Instance.eth.getTransactionReceipt(tmpTx.hash);
                 let vGasPrice = tmpTx.gasPrice;
                 let vGasLimit = tmpTx.gas;
-                let vGasUsed = txReceipt.gasUsed;
+                let txReceipt = await web3Instance.eth.getTransactionReceipt(tmpTx.hash);
+                let vGasUsed = txReceipt?txReceipt.gasUsed:null;
                 let vTxFee = new Decimal(vGasPrice).mul(new Decimal(vGasUsed)).toFixed();
 
                 let vNonce = tmpTx.nonce;
