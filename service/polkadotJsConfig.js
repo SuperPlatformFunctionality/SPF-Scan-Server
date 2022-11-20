@@ -2,6 +2,7 @@ const { ApiPromise, WsProvider, HttpProvider } = require('@polkadot/api');
 const { hexToString, stringToHex } = require("@polkadot/util");
 const config = require('../config/index.js');
 const spfRpcHttp = config.spfRpcHttp;
+const spfRpcWs = config.spfRpcWs;
 
 let getPolkadotApiObj = async function(nodeEndpoint) {
     let provider = null;
@@ -19,10 +20,10 @@ let getPolkadotApiObjHttp = async function() {
 }
 
 let getPolkadotApiObjWs = async function() {
-//    return getPolkadotApiObj(spfRpcWs);
-    return null;
+    return getPolkadotApiObj(spfRpcWs);
 }
 
 module.exports = {
     getPolkadotApiObjHttp,
+    getPolkadotApiObjWs
 }
