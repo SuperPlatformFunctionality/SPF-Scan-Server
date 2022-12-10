@@ -1,6 +1,7 @@
 const DataTypes = require("sequelize").DataTypes;
 const linkDb = require("./linkDb");
 const sequelize = linkDb.sequelize;
+const Decimal = require("decimal.js");
 
 const AccountDao = sequelize.define('AccountDao', {
 	id: {
@@ -31,9 +32,9 @@ const AccountDao = sequelize.define('AccountDao', {
     timestamps: false
 });
 
-async function newAccount(accountAddress, nickName, initBlockNo, transaction) {
+async function newAccount(accountAddress, nickName, initBlockNo, balance = 0, transaction) {
     let newAcntModel = await AccountDao.create({
-		accountAddress,nickName,initBlockNo
+		accountAddress,nickName,initBlockNo, balance : new Decimal(balance).toFixed()
     },{
         transaction:transaction,
         logging:false
